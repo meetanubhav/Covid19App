@@ -1,0 +1,52 @@
+<hr />
+<div class="container mt-2">
+  <div class="form-group row">
+    <div class="col-md-3 col-sm-12 col-xs-12">
+      <label class="text-uppercase text-center" for="countryList">See Country wise data</label>
+    </div>
+    <div class="col-md-3 col-sm-12 col-xs-12">
+      <select class="form-control" name="countryList" id="countryList" (change)='thisCountryData($event)'>
+        <option value="select">-- select --</option>
+        <option *ngFor="let country of countrylist" [value]="country.Country">
+          {{country.Country}}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div *ngIf="selectedCountryData.length == 0;then displayMessage else showContent" ></div>
+  <ng-template #displayMessage>
+    <div [className]="cssMsg" role="alert">
+      {{message}}
+    </div>
+  </ng-template>
+  <ng-template #showContent>
+    <small class="text-muted">*Data may vary from actual records of some countries.</small>
+    <div class="card-deck text-white text-center text-uppercase mt-2">
+      <div class="card bg-info">
+        <div class="card-body">
+          <p class="card-text">{{confirmedCase}}</p>
+        </div>
+        <div class="card-footer">Confirmed</div>
+      </div>
+      <div class="card bg-danger">
+        <div class="card-body">
+          <p class="card-text">{{activeCase}}</p>
+        </div>
+        <div class="card-footer">Active</div>
+      </div>
+      <div class="card bg-success">
+        <div class="card-body">
+          <p class="card-text">{{RecoveredCase}}</p>
+        </div>
+        <div class="card-footer">Recovered</div>
+      </div>
+      <div class="card bg-secondary">
+        <div class="card-body">
+          <p class="card-text">{{DeceasedCase}}</p>
+        </div>
+        <div class="card-footer">Deceased</div>
+      </div>
+    </div>
+  </ng-template>
+
+</div>

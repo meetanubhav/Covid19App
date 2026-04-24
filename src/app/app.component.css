@@ -1,0 +1,59 @@
+.spinner-grow{
+    width: 1rem;
+    height: 1rem;
+}
+.card-text{
+    font-size: 30px;
+}
+.card-body{
+    padding: 0;
+}
+.text-small{
+    font-size: 15px;
+}
+/* .bg-custom-info{
+    background:rgba(0, 140, 255, 0.192);
+}
+.bg-custom-danger{
+    background:rgba(255, 0, 0, 0.192);
+}.bg-custom-success{
+    background:rgba(0, 255, 55, 0.192);
+}.bg-custom-secondary{
+    background:rgba(24, 32, 39, 0.192);
+} */
+.saefty-tips{
+    background-color: #e9ecef;
+}
+.list-group-item{
+    background-color: #e9ecef;
+    border: none;
+    display: inline-block;
+    margin-left: 40%;
+}
+li>span {
+    font-weight: bold;
+}
+@media only screen and (max-width: 768px) {
+    .list-group-item{
+        margin-left: 25%;
+        font-size: 80%;
+    }
+    .card-deck > .card{
+        width: 25%;
+        max-height: 10%;
+        margin-right: 2%;
+    }
+    .card-text{
+        font-size: 20px;
+    }
+    .card-deck{
+        display: flex;
+    }
+    .card-footer{
+        font-size: 40%;
+    }
+    .text-small{
+        font-size: 10px;
+    }
+    
+}

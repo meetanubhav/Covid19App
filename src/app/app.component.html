@@ -1,0 +1,92 @@
+<app-nav-bar></app-nav-bar>
+<div class="container">
+  <h5 class="text-small">India's Live Status : {{currentDT | date:'fullDate'}} <span class="text-secondary"></span>
+    <span class="spinner-grow text-danger text-small" role="status"></span>
+  </h5>
+  <hr />
+  <div *ngIf='serverResponse==true; then showData else showError'></div>
+  <hr />
+<span *ngIf='serverResponse==true'>
+  <!-- <div class="row">
+    <div class="col-md-6 col-sm-12 col-xs-12"> -->
+      <app-state-wise [stateData]='stateData'></app-state-wise>
+      <app-chart-js></app-chart-js>
+    <!-- </div>
+    <div class="col-md-6 col-sm-12 col-xs-12"> -->
+    <!-- </div>
+  </div> -->
+  <app-country-wise></app-country-wise>
+</span>
+</div>
+
+<!-- Template if data exists -->
+<ng-template #showData>
+  <div class="card-deck text-white text-center text-uppercase">
+    <div class="card bg-info">
+      <div class="card-body">
+        <p class="card-text">{{totalConfirm}}
+          <br />
+          <span class="text-small">[ + {{dailyConfirmed}} ]</span>
+        </p>
+      </div>
+      <div class="card-footer">Confirmed</div>
+    </div>
+    <div class="card bg-danger">
+      <div class="card-body">
+        <p class="card-text">{{totalActive}}</p>
+      </div>
+      <div class="card-footer">Active</div>
+    </div>
+    <div class="card bg-success">
+      <div class="card-body">
+        <p class="card-text">{{totalRecovered}}
+        <br />
+        <span class="text-small">[ + {{dailyRecovered}} ]</span>
+        </p>
+      </div>
+      <div class="card-footer">Recovered</div>
+    </div>
+    <div class="card bg-secondary">
+      <div class="card-body">
+        <p class="card-text">{{totalDeaths}}
+          <br />
+        <span class="text-small">[ + {{dailyDeaths}} ]</span>
+        </p>
+      </div>
+      <div class="card-footer">Deceased</div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #showError>
+  <!-- We are extremly sorry ! Some Problem occured at our end while fetching the data. -->
+  <p class="text-center">Loading ... <span class="spinner-border"></span></p>
+</ng-template>
+<br />
+<div class="container saefty-tips text-center">
+  <h2>STAY HOME. SAVE LIVES</h2>
+  <p>Help stop Coronavirus.</p>
+  <ul class="list-group text-uppercase text-left tips-list p-1">
+    <li class="list-group-item">
+      <span class="text-danger mr-1">1</span>
+      <span class="text-bold">Stay</span> Home
+    </li>
+    <li class="list-group-item">
+      <span class="text-danger mr-1">2</span>
+      <span class="text-bold">Keep</span> a safe distance
+    </li>
+    <li class="list-group-item">
+      <span class="text-danger mr-1">3</span>
+      <span class="text-bold">Mantain</span> Hygine
+    </li>
+    <li class="list-group-item">
+      <span class="text-danger mr-1">4</span>
+      <span class="text-bold">Wash</span> hands often
+    </li>
+    <li class="list-group-item">
+      <span class="text-danger mr-1">5</span>
+      <span class="text-bold">Cover</span> yourself while coughing/sneezing
+    </li>
+  </ul>
+  <small>Need medical emergency ? <i class="fa fa-phone"></i> Call Helpline </small>
+</div>
+<app-footer></app-footer>

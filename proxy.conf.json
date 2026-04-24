@@ -1,0 +1,20 @@
+{
+  "/api/*": {
+    "target": "https://api.covid19india.org",
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/covid19/*": {
+    "target": "https://api.covid19api.com",
+    "pathRewrite": {
+      "^/covid19": ""
+    },
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

@@ -1,0 +1,12 @@
+@media only screen and (max-width: 768px) {
+    .state-text{
+        font-size: 20%;
+        margin-top: 2em;
+    }
+    .my-custom-scrollbar{
+        font-size: 50%;
+    }
+}
+.showPointer{
+    cursor: pointer;
+}

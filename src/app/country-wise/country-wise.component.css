@@ -1,0 +1,19 @@
+@media only screen and (max-width: 768px) {
+    .card-deck > .card{
+        width: 25%;
+        max-height: 10%;
+        margin-right: 2%;
+    }
+    .card-text{
+        font-size: 12px;
+    }
+    .card-deck{
+        display: flex;
+    }
+    .card-footer{
+        font-size: 40%;
+    }
+    .text-small{
+        font-size: 10px;
+    }
+}
