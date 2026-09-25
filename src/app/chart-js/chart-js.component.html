@@ -1,2 +1,55 @@
-<h4 class="m-3 text-uppercase text-center chart-text text-small">Data From 30th Jan 2020 - Current</h4>
-<div id="chartContainer"></div>
+<div class="section-head">
+  <div>
+    <h2 class="section-title">Trend in India</h2>
+    <p class="range" *ngIf="rangeLabel">
+      {{ mode === 'daily' ? 'New per day, 7-day average' : 'Cumulative total' }} · {{ rangeLabel }}
+    </p>
+  </div>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Metric">
+      <button type="button" *ngFor="let m of metrics" [class.on]="metric === m.key"
+              [ngClass]="'tone-' + m.key" [attr.aria-pressed]="metric === m.key"
+              (click)="setMetric(m.key)">{{ m.label }}</button>
+    </div>
+    <div class="seg" role="group" aria-label="View">
+      <button type="button" [class.on]="mode === 'daily'" [attr.aria-pressed]="mode === 'daily'" (click)="setMode('daily')">Daily</button>
+      <button type="button" [class.on]="mode === 'total'" [attr.aria-pressed]="mode === 'total'" (click)="setMode('total')">Total</button>
+    </div>
+  </div>
+</div>
+
+<div class="chart-box" [ngClass]="'tone-' + metric">
+  <div class="state-msg" *ngIf="loading"><span class="spinner-border spinner-border-sm me-2"></span>Loading trend…</div>
+  <div class="state-msg" *ngIf="error">
+    Couldn't load the trend.
+    <button type="button" class="btn btn-sm btn-outline-light ms-2" (click)="load(true)">Retry</button>
+  </div>
+
+  <div class="plot" *ngIf="!loading && !error">
+    <svg #svg class="chart" [attr.viewBox]="'0 0 ' + W + ' ' + H" preserveAspectRatio="none"
+         role="img" [attr.aria-label]="'Line chart of ' + metric + ' in India'"
+         (mousemove)="onMove($event, svg)" (touchstart)="onMove($event, svg)" (touchmove)="onMove($event, svg)"
+         (mouseleave)="clearHover()">
+      <g class="grid">
+        <line *ngFor="let t of yTicks" [attr.x1]="pad.left" [attr.x2]="W - pad.right" [attr.y1]="t.pos" [attr.y2]="t.pos"></line>
+      </g>
+      <path class="area" [attr.d]="areaPath"></path>
+      <path class="line" [attr.d]="linePath" vector-effect="non-scaling-stroke"></path>
+      <g *ngIf="hover">
+        <line class="cursor" [attr.x1]="hover.x" [attr.x2]="hover.x" [attr.y1]="pad.top" [attr.y2]="H - pad.bottom" vector-effect="non-scaling-stroke"></line>
+      </g>
+    </svg>
+    <!-- Axis labels live in HTML so text doesn't stretch with the SVG -->
+    <div class="y-labels">
+      <span *ngFor="let t of yTicks" [style.top.%]="(t.pos / H) * 100">{{ t.label }}</span>
+    </div>
+    <div class="x-labels">
+      <span *ngFor="let t of xTicks" [style.left.%]="(t.pos / W) * 100">{{ t.label }}</span>
+    </div>
+    <span *ngIf="hover" class="dot" [style.left.%]="(hover.x / W) * 100" [style.top.%]="(hover.y / H) * 100"></span>
+    <div *ngIf="hover" class="tip" [style.left.%]="hover.left">
+      <strong>{{ hover.point.value | number:'1.0-0':'en-IN' }}</strong>
+      <span>{{ hover.point.date | date:'d MMM y' }}</span>
+    </div>
+  </div>
+</div>

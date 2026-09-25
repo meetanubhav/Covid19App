@@ -1,13 +1,38 @@
-.logo{
-    width: 40px;
-    height: 40px;
-    animation: rotation 8s infinite linear;
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(18, 20, 24, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
 }
-@keyframes rotation {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(359deg);
-    }
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
 }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.brand:hover { color: var(--text); }
+.brand-light { font-weight: 400; color: var(--muted); }
+.logo { animation: rotation 12s infinite linear; }
+@keyframes rotation { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .logo { animation: none; } }
+.gh-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+}
+.gh-link .fab { font-size: 1.3rem; }
+.gh-link:hover { color: var(--text); }

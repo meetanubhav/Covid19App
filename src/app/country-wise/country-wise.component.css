@@ -1,19 +1,17 @@
-@media only screen and (max-width: 768px) {
-    .card-deck > .card{
-        width: 25%;
-        max-height: 10%;
-        margin-right: 2%;
-    }
-    .card-text{
-        font-size: 12px;
-    }
-    .card-deck{
-        display: flex;
-    }
-    .card-footer{
-        font-size: 40%;
-    }
-    .text-small{
-        font-size: 10px;
-    }
+.picker { width: min(260px, 100%); }
+.hint { color: var(--muted); margin: 0; }
+.country-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+  font-size: 1.05rem;
 }
+.country-head img {
+  border-radius: 3px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px var(--border);
+}
+.meta { color: var(--muted); font-size: 0.85rem; }
+.note { display: block; margin-top: 0.75rem; color: var(--muted); }

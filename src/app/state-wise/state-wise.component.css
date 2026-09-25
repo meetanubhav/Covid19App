@@ -1,12 +1,85 @@
-@media only screen and (max-width: 768px) {
-    .state-text{
-        font-size: 20%;
-        margin-top: 2em;
-    }
-    .my-custom-scrollbar{
-        font-size: 50%;
-    }
+.search {
+  position: relative;
+  width: min(240px, 100%);
 }
-.showPointer{
-    cursor: pointer;
+.search .fa {
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.search input { padding-left: 1.9rem; }
+.table-wrap {
+  max-height: 520px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.state-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+.state-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface-2);
+  padding: 0;
+  white-space: nowrap;
+}
+.sort-btn {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.num .sort-btn { justify-content: flex-end; }
+.sort-btn:hover, .sort-btn:focus-visible { color: var(--text); }
+.sort-btn:focus-visible { outline: 2px solid var(--c-active); outline-offset: -2px; }
+.state-table tbody tr { border-top: 1px solid var(--border); }
+.state-table tbody tr:hover { background: var(--surface-2); }
+.state-table td, .state-name {
+  padding: 0.6rem 0.75rem;
+  vertical-align: middle;
+}
+.state-name {
+  position: relative;
+  font-weight: 500;
+  min-width: 150px;
+}
+.bar {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.3rem;
+  height: 2px;
+  max-width: calc(100% - 1.5rem);
+  background: var(--c-confirmed);
+  opacity: 0.55;
+  border-radius: 2px;
+}
+.num { text-align: right; white-space: nowrap; }
+.delta {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--c-confirmed);
+}
+.empty { text-align: center; color: var(--muted); padding: 1.5rem; }
+@media (max-width: 575.98px) {
+  .state-table { font-size: 0.8rem; }
+  .state-table td, .state-name { padding: 0.5rem; }
+  .state-name { min-width: 120px; }
+  .sort-btn { padding: 0.55rem 0.5rem; font-size: 0.68rem; }
 }

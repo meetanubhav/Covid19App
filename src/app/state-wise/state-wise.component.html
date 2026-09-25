@@ -1,21 +1,43 @@
-<h3 class="text-center">STATE WISE LIST</h3>
-<div class="my-custom-scrollbar">
-  <table class="table table-striped">
-    <thead class="thead-dark">
-      <th>State</th>
-      <th>Confirmed</th>
-      <th>Active</th>
-      <th>Recovered</th>
-      <th>Deceased</th>
-    </thead>
-    <tbody *ngFor="let sd of stateData">
-      <tr (click)="getThisStateStats(sd.state);">
-        <td class="text-uppercase showPointer"  *ngIf="sd.confirmed>0 && sd.state != 'Total'">{{sd.state}}</td>
-        <td class="text-primary" *ngIf="sd.confirmed>0 && sd.state != 'Total'">{{sd.confirmed}}</td>
-        <td class="text-danger" *ngIf="sd.confirmed>0 && sd.state != 'Total'">{{sd.active}}</td>
-        <td class="text-success" *ngIf="sd.confirmed>0 && sd.state != 'Total'">{{sd.recovered}}</td>
-        <td class="text-secondary" *ngIf="sd.confirmed>0 && sd.state != 'Total'">{{sd.deaths}}</td>
+<div class="section-head">
+  <h2 class="section-title">State-wise breakdown</h2>
+  <div class="search">
+    <i class="fa fa-search" aria-hidden="true"></i>
+    <input type="search" class="form-control form-control-sm" placeholder="Search state"
+           aria-label="Search state" [(ngModel)]="query" (ngModelChange)="apply()">
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table class="state-table">
+    <thead>
+      <tr>
+        <th *ngFor="let col of columns" scope="col" [attr.aria-sort]="ariaSort(col.key)"
+            [class.num]="col.key !== 'state'">
+          <button type="button" class="sort-btn" (click)="sortBy(col.key)">
+            {{ col.label }}
+            <i class="fa" aria-hidden="true"
+               [ngClass]="sortKey !== col.key ? 'fa-sort' : (sortAsc ? 'fa-sort-up' : 'fa-sort-down')"></i>
+          </button>
+        </th>
       </tr>
- </tbody>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of rows; trackBy: trackByState">
+        <th scope="row" class="state-name">
+          {{ s.state }}
+          <span class="bar" [style.width.%]="(s.cases / maxCases) * 100"></span>
+        </th>
+        <td class="num">
+          {{ s.cases | number:'1.0-0':'en-IN' }}
+          <small class="delta tone-confirmed" *ngIf="s.todayCases > 0">+{{ s.todayCases | number:'1.0-0':'en-IN' }}</small>
+        </td>
+        <td class="num">{{ s.active | number:'1.0-0':'en-IN' }}</td>
+        <td class="num">{{ s.recovered | number:'1.0-0':'en-IN' }}</td>
+        <td class="num">{{ s.deaths | number:'1.0-0':'en-IN' }}</td>
+      </tr>
+      <tr *ngIf="rows.length === 0">
+        <td [attr.colspan]="columns.length" class="empty">No state matches "{{ query }}".</td>
+      </tr>
+    </tbody>
   </table>
 </div>

@@ -1,0 +1,41 @@
+name: Build and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [convergence]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Build
+        run: npx ng build --configuration production --base-href /Covid19App/
+
+      - name: SPA fallback
+        run: cp dist/my-app/index.html dist/my-app/404.html
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/my-app
+          publish_branch: gh-pages
+          commit_message: "Deploy convergence ${{ github.sha }}"

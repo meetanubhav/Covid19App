@@ -1,52 +1,35 @@
-<hr />
-<div class="container mt-2">
-  <div class="form-group row">
-    <div class="col-md-3 col-sm-12 col-xs-12">
-      <label class="text-uppercase text-center" for="countryList">See Country wise data</label>
-    </div>
-    <div class="col-md-3 col-sm-12 col-xs-12">
-      <select class="form-control" name="countryList" id="countryList" (change)='thisCountryData($event)'>
-        <option value="select">-- select --</option>
-        <option *ngFor="let country of countrylist" [value]="country.Country">
-          {{country.Country}}
-        </option>
-      </select>
-    </div>
+<div class="section-head">
+  <h2 class="section-title">Compare another country</h2>
+  <div class="picker">
+    <label class="visually-hidden" for="countryList">Country</label>
+    <select class="form-select form-select-sm" id="countryList"
+            [disabled]="loading || error"
+            [ngModel]="selectedName" (ngModelChange)="select($event)">
+      <option value="">{{ loading ? 'Loading countries…' : 'Select a country' }}</option>
+      <option *ngFor="let c of countries; trackBy: trackByCountry" [value]="c.country">{{ c.country }}</option>
+    </select>
   </div>
-  <div *ngIf="selectedCountryData.length == 0;then displayMessage else showContent" ></div>
-  <ng-template #displayMessage>
-    <div [className]="cssMsg" role="alert">
-      {{message}}
-    </div>
-  </ng-template>
-  <ng-template #showContent>
-    <small class="text-muted">*Data may vary from actual records of some countries.</small>
-    <div class="card-deck text-white text-center text-uppercase mt-2">
-      <div class="card bg-info">
-        <div class="card-body">
-          <p class="card-text">{{confirmedCase}}</p>
-        </div>
-        <div class="card-footer">Confirmed</div>
-      </div>
-      <div class="card bg-danger">
-        <div class="card-body">
-          <p class="card-text">{{activeCase}}</p>
-        </div>
-        <div class="card-footer">Active</div>
-      </div>
-      <div class="card bg-success">
-        <div class="card-body">
-          <p class="card-text">{{RecoveredCase}}</p>
-        </div>
-        <div class="card-footer">Recovered</div>
-      </div>
-      <div class="card bg-secondary">
-        <div class="card-body">
-          <p class="card-text">{{DeceasedCase}}</p>
-        </div>
-        <div class="card-footer">Deceased</div>
-      </div>
-    </div>
-  </ng-template>
-
 </div>
+
+<div class="alert alert-danger d-flex flex-wrap align-items-center gap-3 mb-0" role="alert" *ngIf="error">
+  <span class="flex-grow-1">Couldn't load the country list.</span>
+  <button type="button" class="btn btn-sm btn-light" (click)="load(true)">Retry</button>
+</div>
+
+<ng-container *ngIf="!error">
+  <p class="hint" *ngIf="!selected && !loading">
+    Pick a country to see its totals next to India's.
+  </p>
+
+  <ng-container *ngIf="selected">
+    <div class="country-head">
+      <img *ngIf="selected.flag" [src]="selected.flag" [alt]="selected.country + ' flag'" width="32" height="21" loading="lazy">
+      <strong>{{ selected.country }}</strong>
+      <span class="meta" *ngIf="selected.population">
+        Population {{ selected.population | number:'1.0-0':'en-IN' }}
+      </span>
+    </div>
+    <app-stat-cards [totals]="selected"></app-stat-cards>
+    <small class="note">Updated {{ selected.updated | date:'mediumDate' }}. Figures may differ from official national records.</small>
+  </ng-container>
+</ng-container>

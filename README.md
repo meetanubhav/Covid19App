@@ -79,3 +79,9 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md). -->
+
+## Data & deployment (convergence)
+
+- Data now comes from [disease.sh](https://disease.sh) (`/gov/india`, `/countries`, `/historical/india`). The original sources (`api.covid19india.org`, `api.covid19api.com`) are shut down, and the old dev-server proxy doesn't exist on GitHub Pages.
+- Pushing to `convergence` runs `.github/workflows/deploy.yml`, which builds with `--base-href /Covid19App/` and publishes `dist/my-app` to the `gh-pages` branch.
+- Local: `npm ci && npm start` (dev) or `npm run build` (production).

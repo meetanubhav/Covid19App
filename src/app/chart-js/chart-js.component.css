@@ -1,12 +1,94 @@
-#chartContainer{
-    height: 370px;
-    width: 100%;
-    margin-left:auto;
-    margin-right:auto;
+.range { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.85rem; }
+.controls { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.seg {
+  display: inline-flex;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px;
 }
+.seg button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.seg button:hover { color: var(--text); }
+.seg button.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.3); }
+.seg button:focus-visible { outline: 2px solid var(--c-active); outline-offset: 1px; }
+.tone-cases { --tone: var(--c-confirmed); }
+.tone-recovered { --tone: var(--c-recovered); }
+.tone-deaths { --tone: var(--c-deceased); }
+.seg button.on[class*='tone-'] { color: var(--tone); }
 
-@media only screen and (max-width: 768px) {
-    .chart-text{
-        font-size: 80%;
-    }
+.chart-box {
+  position: relative;
+  aspect-ratio: 8 / 3;
+  min-height: 220px;
+  margin-top: 0.5rem;
+}
+.plot {
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  bottom: 24px;
+  left: 48px;
+}
+.chart { width: 100%; height: 100%; display: block; overflow: visible; touch-action: pan-y; }
+.grid line { stroke: var(--border); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.area { fill: var(--tone); opacity: 0.14; }
+.line { fill: none; stroke: var(--tone); stroke-width: 2; stroke-linejoin: round; }
+.cursor { stroke: var(--muted); stroke-dasharray: 3 3; stroke-width: 1; }
+.y-labels span, .x-labels span {
+  position: absolute;
+  font-size: 0.7rem;
+  color: var(--muted);
+  pointer-events: none;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.y-labels span { right: calc(100% + 8px); transform: translateY(-50%); }
+.x-labels span { top: calc(100% + 6px); transform: translateX(-50%); }
+.dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--tone);
+  border: 2px solid var(--surface);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.tip {
+  position: absolute;
+  top: -4px;
+  transform: translateX(-50%);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.78rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,.35);
+}
+.tip span { color: var(--muted); font-size: 0.7rem; }
+.state-msg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+@media (max-width: 575.98px) {
+  .chart-box { aspect-ratio: 4 / 3; }
+  .controls { width: 100%; }
+  .seg { flex: 1; }
+  .seg button { flex: 1; padding: 0.35rem 0.4rem; }
 }

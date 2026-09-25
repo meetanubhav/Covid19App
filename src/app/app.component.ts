@@ -1,108 +1,61 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DataService } from './services/data.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DataService, IndiaSummary, StateRow } from './services/data.service';
 
-interface DailyData {
-  dailyconfirmed: number;
-  dailyrecovered: number;
-  dailydeceased: number;
-}
-
-interface StateData {
-  active: number;
-  confirmed: number;
-  recovered: number;
-  deaths: number;
-}
-
-interface CovidResponse {
-  statewise: StateData[];
-  cases_time_series: DailyData[];
-}
+type LoadState = 'loading' | 'ready' | 'error';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-
 export class AppComponent implements OnInit, OnDestroy {
 
-  private fullResponse: CovidResponse | null = null;
+  status: LoadState = 'loading';
+  errorMessage = '';
+  summary: IndiaSummary | null = null;
+  stateData: StateRow[] = [];
+
+  readonly tips = [
+    { key: 'Stay', rest: 'home when unwell' },
+    { key: 'Keep', rest: 'a safe distance' },
+    { key: 'Maintain', rest: 'hygiene' },
+    { key: 'Wash', rest: 'hands often' },
+    { key: 'Cover', rest: 'your cough or sneeze' }
+  ];
+
   private destroy$ = new Subject<void>();
-
-  // National aggregate data
-  totalActive: number = 0;
-  totalConfirm: number = 0;
-  totalRecovered: number = 0;
-  totalDeaths: number = 0;
-
-  // Daily stats
-  dailyConfirmed: number = 0;
-  dailyRecovered: number = 0;
-  dailyDeaths: number = 0;
-
-  // State-wise data
-  stateData: StateData[] = [];
-
-  // Status flags
-  serverResponse: boolean = false;
-  errorMessage: string = '';
 
   constructor(private service: DataService) { }
 
-  ngOnInit() {
-    this.service.getData()
+  ngOnInit(): void {
+    this.load();
+  }
+
+  load(force = false): void {
+    this.status = 'loading';
+    this.errorMessage = '';
+    this.service.getIndia(force)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        response => this.handleDataSuccess(response),
-        error => this.handleDataError(error)
-      );
-  }
-
-  private handleDataSuccess(response: CovidResponse): void {
-    try {
-      this.fullResponse = response;
-      this.stateData = response.statewise;
-
-      // Extract national aggregate data from first statewise entry
-      const nationalData = response.statewise[0];
-      this.totalActive = this.parseNumber(nationalData.active);
-      this.totalConfirm = this.parseNumber(nationalData.confirmed);
-      this.totalRecovered = this.parseNumber(nationalData.recovered);
-      this.totalDeaths = this.parseNumber(nationalData.deaths);
-
-      // Extract latest daily data
-      if (response.cases_time_series && response.cases_time_series.length > 0) {
-        const latestDaily = response.cases_time_series[response.cases_time_series.length - 1];
-        this.dailyConfirmed = this.parseNumber(latestDaily.dailyconfirmed);
-        this.dailyRecovered = this.parseNumber(latestDaily.dailyrecovered);
-        this.dailyDeaths = this.parseNumber(latestDaily.dailydeceased);
-      }
-
-      this.serverResponse = true;
-      this.errorMessage = '';
-    } catch (error) {
-      this.handleDataError(error);
-    }
-  }
-
-  private handleDataError(error: any): void {
-    this.serverResponse = false;
-    this.errorMessage = `Error loading data: ${error?.status || 'Unknown error'}`;
-    console.error('Data loading error:', error);
-  }
-
-  private parseNumber(value: any): number {
-    const parsed = parseInt(value, 10);
-    return isNaN(parsed) ? 0 : parsed;
+      .subscribe({
+        next: data => {
+          this.summary = data;
+          this.stateData = data.states;
+          this.status = 'ready';
+        },
+        error: err => {
+          console.error('Failed to load India data', err);
+          this.errorMessage = err && err.status
+            ? `The data service responded with status ${err.status}.`
+            : 'Could not reach the data service. Check your connection and try again.';
+          this.status = 'error';
+        }
+      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  currentDT: number = Date.now();
 }

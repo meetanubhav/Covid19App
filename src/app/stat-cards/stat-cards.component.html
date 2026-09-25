@@ -1,0 +1,12 @@
+<div class="stat-grid">
+  <article *ngFor="let c of cards; trackBy: trackByLabel" class="stat-card" [ngClass]="'tone-' + c.tone">
+    <h3 class="stat-label">{{ c.label }}</h3>
+    <p class="stat-value" [title]="c.value | number">{{ c.value | number:'1.0-0':'en-IN' }}</p>
+    <p class="stat-delta" *ngIf="c.delta !== undefined && c.delta !== null">
+      <ng-container *ngIf="c.delta !== 0; else noChange">
+        {{ c.delta > 0 ? '+' : '' }}{{ c.delta | number:'1.0-0':'en-IN' }} today
+      </ng-container>
+      <ng-template #noChange>No change today</ng-template>
+    </p>
+  </article>
+</div>
